@@ -1,0 +1,16 @@
+{
+  "name": "gulp-workflow",
+  "version": "1.0.0",
+  "description": "a gulp workflow create dby parsclick",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "?.git"
+  },
+  "author": "Amir Azimi",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-coffee": "^2.3.1",
+    "gulp-util": "^3.0.7"
+  }
+}
