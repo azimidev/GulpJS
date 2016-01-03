@@ -4,7 +4,9 @@ var gulp 				= require('gulp'),
 		concat 			= require('gulp-concat')
 		browserify 	= require('gulp-browserify'),
 		compass 		= require('gulp-compass'),
-		minifyCSS 	= require('gulp-minify-css');
+		minifyCSS 	= require('gulp-minify-css'),
+		uglify		 	= require('gulp-uglify'),
+		gulpif 			= require('gulp-if'),
 		connect 		= require('gulp-connect');
 
 var coffeeSources,
@@ -13,17 +15,14 @@ var coffeeSources,
 		htmlSources,
 		jsonSources,
 		env,
-		outputDir,
-		compressed;
+		outputDir;
 
 env = process.env.NODE_ENV || 'development';
 
 if( env === 'development' ) {
 	outputDir = 'builds/development/';
-	compressed = gulp.dest( outputDir + 'css' );
 } else {
 	outputDir  = 'builds/production/';
-	compressed = minifyCSS();
 }
 
 coffeeSources = ['components/coffee/tagline.coffee'];
@@ -48,6 +47,7 @@ gulp.task( 'js', function() {
 	gulp.src( jsSources )
 		.pipe( concat( 'scripts.js' ) )
 		.pipe( browserify() )
+		.pipe( gulpif( env === 'production', uglify() ) )
 		.pipe( gulp.dest( outputDir + 'js' ) )
 		.pipe( connect.reload() )
 });
@@ -58,7 +58,7 @@ gulp.task( 'compass', function() {
 			sass 	: 'components/sass',
 			image : outputDir + 'images'
 		}))
-		.pipe(compressed)
+		.pipe( gulpif( env === 'production', minifyCSS() ) )
 			.on( 'error', gutil.log )
 		.pipe( gulp.dest( outputDir + 'css' ) )
 		.pipe( connect.reload() )
